@@ -3,7 +3,11 @@
 An online Learning and Teaching platform which
 empowers you to grow professionally and personally.
 
-
+# Project Live @https://dj-course.herokuapp.com/
+```bash
+  Use 4111 1111 1111 1111 as Card Number while purchasing Course.
+```
+### Note: The live site is hosted on free tier of heroku, so it may take some time to load the data.
 
 
 ## Installation
