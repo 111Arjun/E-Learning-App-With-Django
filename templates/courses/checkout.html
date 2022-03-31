@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load courses_custom_tags %}
+{% load static %}
+
+{% block title %}
+    Checkout
+{% endblock title %}
+
+
+{% block content %}
+
+<div class="container">
+    <br>
+    <div class="row">
+            <div class="col-md-6 col-lg-4 col-xxl-3">
+                <div class="card p-2 shadow h-100">
+                    <div class="rounded-top overflow-hidden">
+                        <div class="card-overlay-hover">
+                            <!-- Image -->
+                            <img src="{{course.thumbnail.url}}" class="card-img-top" alt="course image">
+                        </div>
+                    </div>
+                    <!-- Card body -->
+                    <div class="card-body px-2">
+                        <!-- Badge and icon -->
+                        <div class="d-flex justify-content-between">
+                            <!-- Rating and info -->
+                            <ul class="list-inline hstack gap-2 mb-0">
+                                <!-- Info -->
+                                <li class="list-inline-item d-flex justify-content-center align-items-center">
+                                    <div class="icon-md bg-orange bg-opacity-10 text-orange rounded-circle"><i class="fas fa-user-graduate"></i></div>
+                                    <span class="h6 fw-light mb-0 ms-2">9.1k</span>
+                                </li>
+                                <!-- Rating -->
+                                <li class="list-inline-item d-flex justify-content-center align-items-center">
+                                    <div class="icon-md bg-warning bg-opacity-15 text-warning rounded-circle"><i class="fas fa-star"></i></div>
+                                    <span class="h6 fw-light mb-0 ms-2">4.5</span>
+                                </li>
+                            </ul>
+                            <!-- Avatar -->
+                            <div class="avatar avatar-sm">
+                                <img class="avatar-img rounded-circle" src="{% static 'images/11.jpg' %}" alt="avatar">
+                            </div>
+                        </div>
+                        <!-- Divider -->
+                        <hr>
+                        <!-- Title -->
+                        <h6 class="card-title"><a href="{% url 'courseDetail' course.slug %}">{{course.name}}</a></h6>
+                        <!-- Discount and Price -->
+                        <div class="d-flex justify-content-between align-items-center mb-0">
+                            {% if course.price == 0 %}
+                                <h3>Free</h3>
+                            {% else %}
+                                {% if course.discount %}
+                                <p>Save {{course.discount}}%</span> <br>
+                                    <span style="font-size: x-large;">
+                                        <del>{{course.price|rupee}}</del>&nbsp;
+                                        <span style="text-indent: 220px; color: red;">
+                                        {% cal_sellprice course.price course.discount as value %} {{value|rupee}}
+                                        </span>
+                                    </span>
+                                </p>
+                                {% else %}
+                                    <span style="font-size: x-large; " >{{course.price|rupee}}</span>
+                                {% endif %}
+                            {% endif %}
+                        </div>      
+                    </div>
+                </div>
+            </div>
+            <br>
+        <div class="col">
+            <h3>Course Name: {{course.name}}</h3>
+
+            {% if coupon %}
+                <h3>Payable Amount:
+                    {% cal_sellprice course.price coupon.discount as value %} {{value|rupee}}
+                </h3>
+                <div class="alert alert-info text-center">
+                    <p>Hurrey!!! Coupon Code was successfully applied. <br>You have got {{ coupon.discount }}% discount.</p>
+                </div>
+
+                <a href="?action=create_payment&couponcode={{coupon.code}}" class="btn btn-primary mb-2" style="text-decoration: none; color: white">Continue to Payment</a>
+            {% else %}
+                <h3>Payable Amount:
+                    {% cal_sellprice course.price course.discount as value %} {{value|rupee}}
+                </h3>
+
+                <a href="?action=create_payment" class="btn btn-primary mb-2 w-50" style="text-decoration: none; color: white">Continue to Payment</a>
+            {% endif %}
+
+            {% if couponcode_message %}
+                <div class="alert alert-info">
+                    <strong>{{couponcode_message}}</strong>
+                </div>
+            {% endif %}
+            <form action="" method="GET">
+                <div class="form-group mt-4">
+                    <label for="">Coupon Code</label>
+                    <input type="text" name="couponcode" class="form-control" 
+                    placeholder="Apply your code here">
+                </div>
+                <button type="submit" class="btn btn-success mt-2 w-100">Apply</button>
+            </form>
+        </div>
+    </div>
+</div>
+    
+    {% if order is not None %}
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        var options = {
+            "key": "{{ Razorpay_KEY_ID }}", // Enter the Key ID generated from the Dashboard
+            "name": "ARJUNGIRI.TK",
+            "description": "Payment for {{course.name}}",
+            "image": "{% static 'images/python.png' %}",
+            "order_id": "{{order.id}}", 
+            "callback_url": "{{ DOMAIN_URL }}/verify_payment/",
+            "prefill": {
+                "name": "{{user.first_name}}",
+                "email": "{{user.email}}"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+
+    </script>
+    {% endif %}
+
+    {% if error is not None %}
+    <script>
+        window.onload = function(){
+            alert("{{error}}")
+        }
+    </script>
+    {% endif %}
+    
+
+{% endblock content %}
+
+

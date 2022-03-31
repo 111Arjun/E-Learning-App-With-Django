@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% load courses_custom_tags %}
+
+
+{% block title %}
+    Online Course | My Courses
+{% endblock title %}
+
+{% block content %}
+
+<style>
+    #title {
+       margin:-10px;
+      }
+</style>
+
+<section class="pt-0 pt-md-5">
+    <div class="container">
+    <h1 class="text-center pb-3">Welcome to My Courses</h1>
+    {% if object_list %}
+
+        <div class="row g-4 ">
+            <!-- Card Item START -->
+            {% for user in object_list %}
+            <div class="col-md-6 col-lg-4 col-xxl-3">
+                <div class="card p-2 shadow h-100">
+                    <div class="rounded-top overflow-hidden">
+                        <div class="card-overlay-hover">
+                            <!-- Image -->
+                            <img src="{{user.course.thumbnail.url}}" class="card-img-top" alt="course image">
+                        </div>
+                    </div>
+                    <!-- Card body -->
+                    <div class="card-body px-2">
+                        <h6 class="card-title text-center" id="title">{{user.course.name}}</h6>     
+                    </div><hr>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col"><a href="{% url 'courseDetail' user.course.slug %}"><button class="btn btn-dark  w-100">Start Course</button></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <!-- Card Item END -->
+        </div>
+    {% else %}
+    <div class="text-center">
+        <h1 style="color: green;">You havenot enrolled in any courses.</h1>
+        <a href="{% url 'courses' %}" class="btn btn-dark w-50">Browse Course</a>
+    </div>
+    <br style="line-height:9">  
+    {% endif %}
+    </div>
+</section>
+
+{% endblock content %}

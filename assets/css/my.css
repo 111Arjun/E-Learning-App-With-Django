@@ -1,0 +1,20 @@
+#lecture_list{
+	overflow-y: scroll;
+}
+
+.active-video{
+	background-color: grey;
+}
+
+.active-video-link{
+	color: white;
+}
+
+.active-video-link:hover{
+	color: white;
+	text-decoration: none;
+}
+
+.no-preview{
+	cursor: not-allowed;
+}

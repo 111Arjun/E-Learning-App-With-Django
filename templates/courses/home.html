@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load static %}
+{% load courses_custom_tags %}
+
+
+{% block title %}
+    Online Course | Django
+{% endblock title %}
+
+{% block banner %}
+
+<section class="bg-light">
+	<div class="container pt-5 mt-0 mt-lg-5">
+		<div class="row position-relative mb-0 mb-sm-5 pb-0 pb-lg-5">
+			<div class="col-lg-8 text-center mx-auto position-relative">
+				
+				<!-- Title -->
+				<h1>Education, talents, and career opportunities. All in one place.</h1>
+				<p>Get inspired and discover something new today. Grow your skill with the most reliable online courses and certifications in marketing, information technology, programming, and data science. </p>
+				
+				<!-- Search course -->
+				<div class="col-md-8 text-center mx-auto pb-5">
+					<form action="{% url 'search_results' %}" method="get" class="bg-body shadow rounded p-2">
+						<div class="input-group">
+							<input class="form-control border-0 me-1" name="q" type="search" placeholder="Find your course">
+							<button type="submit" class="btn btn-primary mb-0 rounded z-index-1"><i class="fas fa-search"></i></button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock banner %}
+
+{% block content %}
+
+<section class="pt-0 pt-md-5">
+	<div class="container">
+		<!-- Title -->
+		<div class="row mb-4">
+			<div class="col-lg-8 text-center mx-auto">
+				<h2 class="fs-1 mb-0">Featured Courses</h2>
+				<p class="mb-0">Explore top picks of the week </p>
+			</div>
+		</div>
+
+		<div class="row g-4">
+			<!-- Card Item START -->
+			{% for course in object_list %}
+			<div class="col-md-6 col-lg-4 col-xxl-3">
+				<div class="card p-2 shadow h-100">
+					<div class="rounded-top overflow-hidden">
+						<div class="card-overlay-hover">
+							<!-- Image -->
+							<img src="{{course.thumbnail.url}}" class="card-img-top" alt="course image">
+						</div>
+						<!-- Hover element -->
+						<div class="card-img-overlay">
+							<div class="card-element-hover d-flex justify-content-end">
+								<a href="{% url 'checkout' course.slug %}" class="icon-md bg-white rounded-circle">
+									<i class="fas fa-shopping-cart text-danger"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+					<!-- Card body -->
+					<div class="card-body px-2">
+						<!-- Badge and icon -->
+						<div class="d-flex justify-content-between">
+							<!-- Rating and info -->
+							<ul class="list-inline hstack gap-2 mb-0">
+								<!-- Info -->
+								<li class="list-inline-item d-flex justify-content-center align-items-center">
+									<div class="icon-md bg-orange bg-opacity-10 text-orange rounded-circle"><i class="fas fa-user-graduate"></i></div>
+									<span class="h6 fw-light mb-0 ms-2">9.1k</span>
+								</li>
+								<!-- Rating -->
+								<li class="list-inline-item d-flex justify-content-center align-items-center">
+									<div class="icon-md bg-warning bg-opacity-15 text-warning rounded-circle"><i class="fas fa-star"></i></div>
+									<span class="h6 fw-light mb-0 ms-2">4.5</span>
+								</li>
+							</ul>
+							<!-- Avatar -->
+							<div class="avatar avatar-sm">
+								<img class="avatar-img rounded-circle" src="{% static 'images/11.jpg' %}" alt="avatar">
+							</div>
+						</div>
+						<!-- Divider -->
+						<hr>
+						<!-- Title -->
+						<h6 class="card-title"><a href="{% url 'courseDetail' course.slug %}">{{course.name}}</a></h6>
+						<!-- Discount and Price -->
+						<div class="d-flex justify-content-between align-items-center mb-0">
+							{% if course.price == 0 %}
+							    <h3>Free</h3>
+							{% else %}
+								{% if course.discount %}
+							    <p><span class="badge bg-success">Save {{course.discount}}%</span><br>
+							    	<span style="font-size: x-large;">
+							    		<del>{{course.price|rupee}}</del>&nbsp;
+							    		<span style="text-indent: 220px; color: red; padding-left: 180px;">
+							    		{% cal_sellprice course.price course.discount as value %} {{value|rupee}}
+							    		</span>
+							    	</span>
+							    </p>
+							    {% else %}
+							        <span style="font-size: x-large; " >{{course.price|rupee}}</span>
+							    {% endif %}
+						    {% endif %}
+						</div>		
+					</div><hr>
+					<div class="card-footer">
+						{% is_enrolled request course as enrolled %}
+							<div class="row">
+								{% if enrolled %}
+									<div class="col"><a href="{% url 'courseDetail' course.slug %}"><button class="btn btn-dark  w-100">Start Course</button></a></div>
+								{% else %}
+									<div class="col"><a href="{% url 'checkout' course.slug %}"><button class="btn btn-dark  w-100">Enroll Now</button></a></div>
+	    							<div class="col"><a href="{% url 'courseDetail' course.slug %}"><button class="btn btn-dark  w-100">Show More</button></a></div>
+	    						{% endif %}
+							</div>
+						</div>
+				</div>
+			</div>
+			{% endfor %}
+			<!-- Card Item END -->
+		</div>
+	</div>
+</section>
+
+<!-- Action box START -->
+<section class="py-0 mb-5">
+	<div class="container">
+		<div class="row g-4">
+      <!-- Action box item -->
+			<div class="col-lg-6 position-relative overflow-hidden">
+				<div class="bg-primary bg-opacity-10 rounded-3 p-5 h-100">
+					<!-- Image -->
+					<div class="position-absolute bottom-0 end-0 me-3">
+						<img src="{% static 'images/08.svg' %}" class="h-100px h-sm-200px" alt="">
+					</div>	
+					<!-- Content -->
+					<div class="row">
+						<div class="col-sm-8 position-relative">
+							<h3 class="mb-1">Earn a Certificate</h3>
+							<p class="mb-3 h5 fw-light lead">Get the right professional certificate program for you.</p>
+							<a href="{% url 'courses' %}" class="btn btn-primary mb-0">View Programs</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+      <!-- Action box item -->
+			<div class="col-lg-6 position-relative overflow-hidden">
+				<div class="bg-secondary rounded-3 bg-opacity-10 p-5 h-100">
+					<!-- Image -->
+					<div class="position-absolute bottom-0 end-0 me-3">
+						<img src="{% static 'images/15.svg' %}" class="h-100px h-sm-200px" alt="">
+					</div>	
+					<!-- Content -->
+					<div class="row">
+						<div class="col-sm-8 position-relative">
+							<h3 class="mb-1">Best Rated Courses</h3>
+							<p class="mb-3 h5 fw-light lead">Enroll now in the most popular and best rated courses.</p>
+							<a href="{% url 'courses' %}" class="btn btn-warning mb-0">View Courses</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Action box END -->
+
+
+{% endblock content %}

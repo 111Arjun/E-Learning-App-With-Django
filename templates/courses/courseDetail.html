@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load courses_custom_tags %}
+
+
+{% block title %}
+    Course Page | Django
+{% endblock title %}
+
+{% block content %}
+
+
+    <div class="container"><br>
+    	
+    	{% is_enrolled request course as enrolled %}
+    	{% if not enrolled %}
+		<a href="{% url 'checkout' course.slug %}" class="btn btn-primary mb-2" style="text-decoration: none; color: white">Enroll Now</a>
+    	{% endif %}
+    	
+    	<!-- Showing Video related to the Lecture -->
+    	<div class="row">
+    		<!-- Youtube Player -->
+    		<div class="col-9">
+    			<iframe id="player" width="100%" src="https://www.youtube.com/embed/{{video.video_id}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    			<div class="d-flex justify-content-between">
+    				{% if previous_lecture %}
+			    	    <a href="?lecture={{previous_lecture}}" class="btn btn-success">Previous Lecture</a>
+			    	{% else %}
+			    	    <a class="btn btn-success disabled">Previous Lecture</a>
+			    	{% endif %}
+
+			    	{% if next_lecture %}
+			    		<a href="?lecture={{next_lecture}}" class="btn btn-success">Next Lecture</a>
+			    	{% else %}
+			    	    <a class="btn btn-success disabled">Next Lecture</a>
+			    	{% endif %}
+    			</div>
+    		</div>
+
+    		<!-- Lecture List -->
+    		<div class="col-3">
+    			<ul id="lecture_list" class="list-group">
+    				{% is_enrolled request course as enrolled %}
+    				{% for vid in videos %}
+
+    					<li class="list-group-item {% if vid == video %} active-video {% endif %}">
+    						<a class="
+    						
+    						{% if not enrolled and not vid.is_preview  %}text-muted no-preview {% endif %}
+
+    						{% if vid == video %} active-video-link {% endif %}
+    						" 
+    						href="?lecture={{vid.serial_number}}" style="text-decoration: none; ">
+    						
+    					 {{vid}}</a>
+    					</li>
+    				{% endfor %}    			
+    			</ul>
+    		</div>
+    	</div>
+
+
+    	<!-- Showing Details of the Particular Course -->
+    	<div class="col-sm-9 mt-3">
+    		<div class="text-center">
+    			<h4>{{course.name}}</h4>
+    		</div>
+
+    		<div>
+	    		<h4 class="btn btn-danger w-100">Course Description</h4>
+	    		<p>{{course.description|linebreaksbr}}</p>
+    		</div>
+
+    		<div>
+	    		<h4 class="btn btn-warning w-100">What you'll learn</h4>
+	    		<ul class="list-unstyled">
+				  	{% for learn in course.learning_set.all %}
+				   		<li><i class="fa-regular fa-circle-check"></i> {{learn.description}}</li>
+				   	{% endfor %}
+				</ul>
+    		</div>
+
+    		<div>
+	    		<h4 class="btn btn-dark w-100">Requirements</h4>
+	    		<ul class="list-unstyled">
+				  	{% for pre in course.prerequisite_set.all %}
+				    	<li><i class="fa-regular fa-circle-check"></i> {{pre.description}}</li>
+				    {% endfor %}
+				</ul>
+    		</div>
+
+    	</div>
+
+    	
+    </div>
+
+
+
+
+{% endblock content %}
+
+

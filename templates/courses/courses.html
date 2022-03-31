@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% load courses_custom_tags %}
+
+
+{% block title %}
+    Online Course | Django
+{% endblock title %}
+
+{% block banner %} 
+
+<section class="bg-dark align-items-center d-flex" 
+  style="background:url({% static 'images/04.png' %}) no-repeat center center; 
+  background-size:cover;">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<h1 class="text-white text-center">All Courses</h1>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock banner %}
+
+
+{% block content %}
+
+<section class="pt-5">
+	<div class="container">
+		<!-- Course list START -->
+		<div class="row g-4 justify-content-center">
+			{% for course in object_list %}
+			<div class="col-lg-10 col-xxl-6">
+				<div class="card rounded overflow-hidden shadow">
+					<div class="row g-0">
+						<!-- Image -->
+						<div class="col-md-4">
+							<img src="{{course.thumbnail.url}}" alt="course image">
+						</div>
+
+						<!-- Card body -->
+						<div class="col-md-8">
+							<div class="card-body">
+								<!-- Title -->
+								<div class="d-flex justify-content-between mb-2">
+									<h5 class="card-title mb-0"><a href="{% url 'courseDetail' course.slug %}">{{course.name}}</a></h5>
+									<!-- Wishlist icon -->
+									<a href="#"><i class="fas fa-heart text-danger"></i></a>
+								</div>
+								<!-- Content -->
+								<!-- Info -->
+								<ul class="list-inline mb-1">
+									<li class="list-inline-item h6 fw-light mb-1 mb-sm-0"><i class="far fa-clock text-danger me-2"></i>{{course.length}} Hr</li>
+									<li class="list-inline-item h6 fw-light mb-1 mb-sm-0"><i class="fas fa-table text-orange me-2"></i>{{course.video_set.count}} lectures</li>
+									<li class="list-inline-item h6 fw-light"><i class="fas fa-signal text-success me-2"></i>{{course.level}}</li>
+								</ul>
+								<!-- Rating -->
+								<ul class="list-inline mb-0">
+									<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item me-0 small"><i class="fas fa-star-half-alt text-warning"></i></li>
+									<li class="list-inline-item ms-2 h6 fw-light">4.5/5.0</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<!-- Course list END -->
+
+		<!-- Pagination START -->
+		<div class="col-12">
+			<nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
+				<ul class="pagination pagination-primary-soft rounded mb-0">
+					{% if page_obj.has_previous %}
+			            <li class="page-item mb-0"><a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1"><i class="fas fa-angle-double-left"></i> Previous</a></li>
+			        {% endif %}
+
+			        <span class="current">
+			            <li class="page-item mb-0 active"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+			        </span>
+
+			        {% if page_obj.has_next %}
+			            <li class="page-item mb-0"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="fas fa-angle-double-right"></i> Next</a></li>
+			        {% endif %}
+					
+				</ul>
+			</nav>
+		</div>
+		<!-- Pagination END -->
+		
+	</div>
+</section>
+{% endblock content %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% load static %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block style %}
+  
+  a{text-decoration:none}
+  .alert{width: 550px; }
+  .alert ul{list-style-type:none; text-align:center;}
+  .alert ul li{margin:-8px}
+
+
+
+{% endblock style %}
+
+{% block content %}
+
+<main>
+  <section class="p-0 d-flex align-items-center position-relative overflow-hidden">
+  
+    <div class="container-fluid">
+      <div class="row">
+        <!-- left -->
+        <div class="col-12 col-lg-6 d-md-flex align-items-center justify-content-center bg-primary bg-opacity-10 vh-lg-100">
+          <div class="p-3 p-lg-5">
+            <!-- Title -->
+            <div class="text-center">
+              <h2 class="fw-bold">Welcome to our largest community</h2>
+              <p class="mb-0 h6 fw-light">Let's learn something new today!</p>
+            </div>
+            <!-- SVG Image -->
+            <img src="{% static 'images/02.svg' %}" class="mt-5" alt="">
+            <!-- Info -->
+            <div class="d-sm-flex mt-5 align-items-center justify-content-center">
+              <!-- Avatar group -->
+              <ul class="avatar-group mb-2 mb-sm-0">
+                <li class="avatar avatar-sm">
+                  <img class="avatar-img rounded-circle" src="{% static 'images/11.jpg' %}" alt="avatar">
+                </li>
+                <li class="avatar avatar-sm">
+                  <img class="avatar-img rounded-circle" src="{% static 'images/01.jpg' %}" alt="avatar">
+                </li>
+                <li class="avatar avatar-sm">
+                  <img class="avatar-img rounded-circle" src="{% static 'images/02.jpg' %}" alt="avatar">
+                </li>
+                <li class="avatar avatar-sm">
+                  <img class="avatar-img rounded-circle" src="{% static 'images/07.jpg' %}" alt="avatar">
+                </li>
+              </ul>
+              <!-- Content -->
+              <p class="mb-0 h6 fw-light ms-0 ms-sm-3">4k+ Students joined us, now it's your turn.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right -->
+        <div class="col-12 col-lg-6 m-auto">
+          <div class="row my-5">
+            <div class="col-sm-10 col-xl-8 m-auto">
+              <!-- Title -->
+              <span class="mb-0 fs-1">👋</span>
+              <h1 class="fs-2">Login into E-learning!</h1>
+              <p class="lead mb-4">Nice to see you! Please log in with your account.</p>
+
+              <!-- Form START -->
+              <form class="login" method="POST" action="{% url 'account_login' %}">
+                {% csrf_token %}
+                {{ form|crispy }}
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+                <br>
+                <button class="primaryAction btn btn-dark w-100 btn-lg mt-1" type="submit">{% trans "Sign In" %}</button>
+                
+              </form>
+              <!-- Form END -->
+
+              <!-- Social buttons and divider -->
+              <div class="row">
+                <!-- Divider with text -->
+                <div class="position-relative my-4">
+                  <hr>
+                  <p class="small position-absolute top-50 start-50 translate-middle bg-body px-5">Or</p>
+                </div>
+
+                <!-- Social btn -->
+                <div class="col-xxl-6 d-grid">
+                  <a href="{% provider_login_url 'google' %}" class="btn bg-google mb-2 mb-xxl-0"><i class="fab fa-fw fa-google text-white me-2"></i>Login with Google</a>
+                </div>
+              </div>
+
+              <!-- Sign up link -->
+              <div class="mt-4 text-center">
+                <span>Don't have an account? <a href="{{ signup_url }}">Signup here</a></span>
+              </div>
+            </div>
+          </div> <!-- Row END -->
+        </div>
+      </div> <!-- Row END -->
+    </div>
+  </section>
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+
+{% endblock %}
+

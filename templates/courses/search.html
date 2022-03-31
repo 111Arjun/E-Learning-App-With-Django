@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}
+    Online Course | Contact Us
+{% endblock title %}
+
+{% block banner %} 
+
+<section class="bg-dark align-items-center d-flex" style="background:url({% static 'images/04.png' %}) no-repeat center center; background-size:cover;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-white text-center">Search Results</h1>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock banner %}
+
+{% block content %}
+
+<section class="pt-5">
+    <div class="container">
+        <!-- Course list START -->
+        <div class="row g-4 justify-content-center">
+        {% if object_list %}
+            {% for course in object_list %}
+            <div class="col-lg-10 col-xxl-6">
+                <div class="card rounded overflow-hidden shadow">
+                    <div class="row g-0">
+                        <!-- Image -->
+                        <div class="col-md-4">
+                            <img src="{{course.thumbnail.url}}" alt="course image">
+                        </div>
+
+                        <!-- Card body -->
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <!-- Title -->
+                                <div class="d-flex justify-content-between mb-2">
+                                    <h5 class="card-title mb-0"><a href="{% url 'courseDetail' course.slug %}">{{course.name}}</a></h5>
+                                    <!-- Wishlist icon -->
+                                    <a href="#"><i class="fas fa-heart text-danger"></i></a>
+                                </div>
+                                <!-- Content -->
+                                <!-- Info -->
+                                <ul class="list-inline mb-1">
+                                    <li class="list-inline-item h6 fw-light mb-1 mb-sm-0"><i class="far fa-clock text-danger me-2"></i>{{course.length}} Hr</li>
+                                    <li class="list-inline-item h6 fw-light mb-1 mb-sm-0"><i class="fas fa-table text-orange me-2"></i>{{course.video_set.count}} lectures</li>
+                                    <li class="list-inline-item h6 fw-light"><i class="fas fa-signal text-success me-2"></i>{{course.level}}</li>
+                                </ul>
+                                <!-- Rating -->
+                                <ul class="list-inline mb-0">
+                                    <li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+                                    <li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+                                    <li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+                                    <li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+                                    <li class="list-inline-item me-0 small"><i class="fas fa-star-half-alt text-warning"></i></li>
+                                    <li class="list-inline-item ms-2 h6 fw-light">4.5/5.0</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="text-center">
+            <h1 style="color: green;">Did not Found any Courses that you Search</h1>
+            <a href="{% url 'courses' %}" class="btn btn-dark w-50">Browse Course</a>
+        </div>
+        {% endif %}
+        </div>
+        <!-- Course list END -->
+    </div>
+</section>
+<br style="line-height:4">
+{% endblock content %}
