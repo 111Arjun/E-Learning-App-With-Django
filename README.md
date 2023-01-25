@@ -3,7 +3,7 @@
 An online Learning and Teaching platform which
 empowers you to grow professionally and personally.
 
-# Project Live @https://dj-course.herokuapp.com/
+# Project Live @https://elearning-408k.onrender.com
 ```bash
   Use 4111 1111 1111 1111 as Card Number while purchasing Course.
 ```
